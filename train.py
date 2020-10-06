@@ -1,28 +1,30 @@
 # -*- coding: UTF-8 -*-
 
-import os
-import time
-import random
-import numpy as np
 import argparse
+import os
+import random
+import time
+from itertools import chain
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torch.utils.data import DataLoader
-from tensorboardX import SummaryWriter
-import layers
-import models
-import datasets
-import utils
-import metrics
-import visualization
-from itertools import chain
 import torchvision
+from tensorboardX import SummaryWriter
+from torch.utils.data import DataLoader
+
+import datasets
+import layers
+import metrics
+import models
+import utils
+import visualization
 
 
 def _main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('--dataset-type', type=str, required=True,
                         choices=['MNIST', 'FashionMNIST', 'CIFAR10', 'STL10', 'ImageNet10'],

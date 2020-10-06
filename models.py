@@ -2,6 +2,7 @@
 
 import torch
 import torch.nn as nn
+
 import layers
 
 
@@ -13,7 +14,7 @@ def get_encoder(dataset_type, img_type, dim_zs, dim_zc):
     elif img_type == 'sobel':
         img_dim = 2
     else:
-        raise ValueError
+        raise ValueError(img_type)
 
     if dataset_type in ['MNIST', 'FashionMNIST']:
         return Encoder28(img_dim, dim_zs, dim_zc, return_act=True)
@@ -22,7 +23,7 @@ def get_encoder(dataset_type, img_type, dim_zs, dim_zc):
     elif dataset_type in ['STL10', 'ImageNet10']:
         return Encoder96(img_dim, 64, dim_zs, dim_zc, return_act=True, norm_type='bn', momentum=0.1)
     else:
-        raise NotImplementedError
+        raise NotImplementedError(dataset_type)
 
 
 def get_critic(dim_zs, dim_zc):
@@ -37,7 +38,7 @@ def get_discriminator(dataset_type, dim_zs, dim_zc):
     elif dataset_type in ['STL10', 'ImageNet10']:
         return Discriminator(6 * 6 * 64 * 8, dim_zs + dim_zc)
     else:
-        raise NotImplementedError
+        raise NotImplementedError(dataset_type)
 
 
 class Encoder28(nn.Module):

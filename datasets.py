@@ -2,10 +2,11 @@
 
 import os
 import random
-from torch.utils.data import Dataset, ConcatDataset
-import torchvision
+
 import numpy as np
+import torchvision
 from PIL import Image
+from torch.utils.data import Dataset, ConcatDataset
 
 
 def channel_shuffle_fn(img):
@@ -28,20 +29,20 @@ class ClusterDataset(Dataset):
         self.training = training
 
         if dataset_type == 'MNIST':
-            dataset_train = torchvision.datasets.MNIST(root, train=True)
-            dataset_test = torchvision.datasets.MNIST(root, train=False)
+            dataset_train = torchvision.datasets.MNIST(root, train=True, download=True)
+            dataset_test = torchvision.datasets.MNIST(root, train=False, download=True)
             self.dataset = ConcatDataset([dataset_train, dataset_test])
         elif dataset_type == 'FashionMNIST':
             dataset_train = torchvision.datasets.FashionMNIST(root, train=True)
             dataset_test = torchvision.datasets.FashionMNIST(root, train=False)
             self.dataset = ConcatDataset([dataset_train, dataset_test])
         elif dataset_type == 'CIFAR10':
-            dataset_train = torchvision.datasets.CIFAR10(root, train=True)
-            dataset_test = torchvision.datasets.CIFAR10(root, train=False)
+            dataset_train = torchvision.datasets.CIFAR10(root, train=True, download=True)
+            dataset_test = torchvision.datasets.CIFAR10(root, train=False, download=True)
             self.dataset = ConcatDataset([dataset_train, dataset_test])
         elif dataset_type == 'STL10':
-            dataset_train = torchvision.datasets.STL10(root, split='train')
-            dataset_test = torchvision.datasets.STL10(root, split='test')
+            dataset_train = torchvision.datasets.STL10(root, split='train', download=True)
+            dataset_test = torchvision.datasets.STL10(root, split='test', download=True)
             self.dataset = ConcatDataset([dataset_train, dataset_test])
         elif dataset_type in ['ImageNet10']:
             # The directory is like:
@@ -112,7 +113,7 @@ class ClusterDataset(Dataset):
                 aug_list.append(torchvision.transforms.Normalize(mean=[0.5], std=[0.5]))
             self.transforms_aug = torchvision.transforms.Compose(aug_list)
         else:
-            raise NotImplementedError
+            raise NotImplementedError(dataset_type)
 
     def __getitem__(self, item):
         img_raw, label = self.dataset[item]
